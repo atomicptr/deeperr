@@ -66,7 +66,7 @@ func NewWithCode(code Code, message string, prev error) Error {
 
 // IsCode checks if the first deeperr.Error in the chain has the error code
 func IsCode(err error, code Code) bool {
-	if e, ok := errors.AsType[Error](err); ok {
+	if e, ok := As(err); ok {
 		return e.Code() == code
 	}
 
@@ -86,4 +86,14 @@ func Contains(err error, code Code) bool {
 	}
 
 	return false
+}
+
+// As transforms the first error in the chain into `deeperr.Error` and returns it and true, returns false otherwise
+func As(err error) (Error, bool) {
+	if e, ok := errors.AsType[Error](err); ok {
+		return e, true
+	}
+
+	var zero Error
+	return zero, false
 }
