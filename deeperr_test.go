@@ -137,3 +137,46 @@ func TestErrorMessageAndLocation(t *testing.T) {
 		t.Error("expected valid location")
 	}
 }
+
+func TestAs(t *testing.T) {
+	err := New("test", nil)
+
+	e, ok := As(err)
+	if !ok {
+		t.Error("expected As to return true")
+	}
+
+	if e.Code() != CodeUnset {
+		t.Error("wrong code")
+	}
+}
+
+func TestAsNested(t *testing.T) {
+	inner := NewWithCode(7, "inner", nil)
+	outer := New("outer", inner)
+
+	e, ok := As(outer)
+	if !ok {
+		t.Error("expected As to return true")
+	}
+
+	if e.Code() != CodeUnset {
+		t.Error("expected outer error code (As only checks first error in chain)")
+	}
+}
+
+func TestAsNonDeeperrError(t *testing.T) {
+	err := errors.New("plain")
+
+	_, ok := As(err)
+	if ok {
+		t.Error("expected As to return false")
+	}
+}
+
+func TestAsNil(t *testing.T) {
+	_, ok := As(nil)
+	if ok {
+		t.Error("expected As to return false for nil")
+	}
+}
