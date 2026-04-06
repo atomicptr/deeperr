@@ -16,8 +16,8 @@ func (e errorImpl) Code() Code {
 	return e.code
 }
 
-func (e errorImpl) Location() (string, int) {
-	return e.file, e.line
+func (e errorImpl) Message() string {
+	return e.msg
 }
 
 func (e errorImpl) Error() string {
@@ -30,4 +30,8 @@ func (e errorImpl) Error() string {
 
 func (e errorImpl) Unwrap() error {
 	return e.prevErr
+}
+
+func (e errorImpl) Location() (string, int) {
+	return e.file, e.line
 }

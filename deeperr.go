@@ -14,9 +14,19 @@ const CodeUnset Code = -1
 
 // Error is an error type with stack traces and error code tagging capabilities
 type Error interface {
+	// Code returns the error code or `deeperr.CodeUnset`
 	Code() Code
+
+	// Message returns the error message
+	Message() string
+
+	// Error returns the error code and the error message
 	Error() string
+
+	// Unwrap returns the next error in the chain
 	Unwrap() error
+
+	// Location returns the location where the error was created
 	Location() (string, int)
 }
 
